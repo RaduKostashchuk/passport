@@ -35,7 +35,7 @@ public class PassportControl {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<List<Passport>> find(@RequestParam(value = "series", required = false) String series) {
+    public ResponseEntity<Iterable<Passport>> find(@RequestParam(value = "series", required = false) String series) {
         return new ResponseEntity<>(service.find(series), HttpStatus.OK);
     }
 

@@ -6,6 +6,7 @@ import ru.job4j.passport.firstservice.repository.PassportRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -18,6 +19,9 @@ public class PassportService {
     }
 
     public Passport save(Passport passport) {
+        if (repository.existsBySeriesAndNumber(passport.getSeries(), passport.getNumber())) {
+            throw new IllegalArgumentException("Такой паспорт уже существует");
+        }
         return repository.save(passport);
     }
 
@@ -50,19 +54,17 @@ public class PassportService {
     }
 
     public void delete(int id) {
-        repository.deleteById(id);
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+        } else {
+            throw new NoSuchElementException("Такого паспорта не существует");
+        }
     }
 
-    public List<Passport> find(String series) {
-        List<Passport> result;
-        if (series != null) {
-            result = repository.findBySeries(series);
-        } else {
-            result = StreamSupport
-                    .stream(repository.findAll().spliterator(), false)
-                    .collect(Collectors.toList());
-        }
-        return result;
+    public Iterable<Passport> find(String series) {
+        return series != null
+                ? repository.findBySeries(series)
+                : repository.findAll();
     }
 
     public List<Passport> findExpired() {

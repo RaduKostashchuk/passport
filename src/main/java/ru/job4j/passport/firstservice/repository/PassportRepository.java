@@ -9,6 +9,8 @@ import java.util.List;
 public interface PassportRepository extends CrudRepository<Passport, Integer> {
     List<Passport> findBySeries(String series);
 
+    boolean existsBySeriesAndNumber(String series, String number);
+
     @Query(value = "SELECT * FROM passport WHERE expiration <= current_date", nativeQuery = true)
     List<Passport> findExpired();
 

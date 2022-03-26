@@ -18,7 +18,7 @@ public class FindExpired {
         this.template = template;
     }
 
-    @Scheduled(fixedDelay = 10, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedDelay = 10000, timeUnit = TimeUnit.SECONDS)
     private void findExpired() {
         List<Passport> expired = service.findExpired();
         for (Passport passport : expired) {
